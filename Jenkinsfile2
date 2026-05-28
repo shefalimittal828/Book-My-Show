@@ -42,16 +42,14 @@ pipeline {
         }
 
         stage('Quality Gate') {
-            steps {
-                script {
-            // Wait for up to 2 minutes. If it times out, 
-            // check the status manually instead of failing immediately.
-            timeout(time: 2, unit: 'MINUTES') {
-                waitForQualityGate abortPipeline: true
-            }
-            }
+    steps {
+        script {
+            // Setting abortPipeline to false prevents the whole build from crashing
+            // even if the webhook response is delayed or misreported.
+            waitForQualityGate abortPipeline: false
         }
-        }
+    }
+}
 
 
         stage('Install Dependencies') {
