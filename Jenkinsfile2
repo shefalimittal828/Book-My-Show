@@ -44,8 +44,11 @@ pipeline {
         stage('Quality Gate') {
             steps {
                 script {
-                    waitForQualityGate abortPipeline: false, credentialsId: 'Sonar-token'
-                }
+            // Wait for up to 2 minutes. If it times out, 
+            // check the status manually instead of failing immediately.
+            timeout(time: 2, unit: 'MINUTES') {
+                waitForQualityGate abortPipeline: true
+            }
             }
         }
 
